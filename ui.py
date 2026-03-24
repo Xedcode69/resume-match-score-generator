@@ -23,7 +23,9 @@ if submit:
         st.success("Inputs received. Scanning resume...")
         try:
             with st.spinner("Processing..."):
-                response = requests.post(URL, params={"jd": jd, "file": uploaded_pdf})
+                files = {"file": (uploaded_pdf)}
+                data = {"jd": jd}
+                response = requests.post(URL, data=data, files=files)
 
             if response.status_code == 200:
                 data = response.json()
