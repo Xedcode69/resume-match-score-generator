@@ -26,6 +26,7 @@ if submit:
                 files = {"file": (uploaded_pdf)}
                 data = {"jd": jd}
                 response = requests.post(URL, data=data, files=files)
+            ## as fastapi expects form data file and uploaded file cannot use params (params used for get request)
 
             if response.status_code == 200:
                 data = response.json()
