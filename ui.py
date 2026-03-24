@@ -1,8 +1,13 @@
 import streamlit as st
 import os
 import requests
+from dotenv import load_dotenv
 
-URL = "http://127.0.0.1:8000/scan"
+load_dotenv()
+
+base_url = os.getenv("BASE_URL")
+
+URL = f"{base_url}/scan"
 
 st.set_page_config("Resume_scanner")
 st.title("Resume Scanner")
@@ -15,21 +20,10 @@ with st.form("resume_scanner_form"):
 
 if submit:
     if jd and uploaded_pdf:
-        if not os.path.exists("uploads"):
-            os.makedirs("uploads")
-
-        filepath = os.path.join("uploads", uploaded_pdf.name)
-
-        with open(filepath, "wb") as file:
-            file.write(uploaded_pdf.getbuffer())
-
-        st.success("File uploaded successfully")
-
+        st.success("Inputs received. Scanning resume...")
         try:
             with st.spinner("Processing..."):
-                response = requests.get(
-                    URL, params={"jd": jd, "name": uploaded_pdf.name}
-                )
+                response = requests.post(URL, params={"jd": jd, "file": uploaded_pdf})
 
             if response.status_code == 200:
                 data = response.json()

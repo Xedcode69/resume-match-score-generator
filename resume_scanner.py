@@ -1,15 +1,20 @@
 import fitz
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 import string
+import os
 
 
 def extract_pdf_txt(name):
-    resume = fitz.open(f"uploads/{name}")  # open a document
+    path = os.path.join("uploads", name)
+    resume = fitz.open(path)  # open a document
     res_content = ""
     for page in resume:  # iterate the document pages
         res_content += page.get_text()
+
+    resume.close()
     return res_content
 
 
